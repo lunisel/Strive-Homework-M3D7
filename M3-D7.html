@@ -14,8 +14,9 @@
 
 <body>
 
-  <h1>List of Users:</h1>
-  <label for="dropdown">Choose name, username and email:</label>
+  <h1 class="py-3 text-center">List of Users:</h1>
+
+  <label for="dropdown" class="pl-2">Choose name, username and email:</label>
   
   <select id="dropdown">
     <option value="name">Name</option>
@@ -27,7 +28,7 @@
 
   <button id="submit" onclick="filter()">Submit</button>
 
-  <table id="table">
+  <table id="table" class="mt-4">
 
     <tr>
       <th class="px-5">ID</th>
@@ -37,6 +38,12 @@
     </tr>
 
   </table>
+
+  <h2 class="my-2">Addresses :</h2>
+
+  <div class="container-fluid">
+
+  </div>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -67,9 +74,11 @@ const displayUsers = async () => {
         users.forEach((user) => {
           table.innerHTML += userDisplay(user)
           userArray.push(user)
+          
         })
      // }
-      return userArray
+     adressDisplay(userArray)
+     return userArray
       
     } catch (err){alert(err)}
     
@@ -85,22 +94,26 @@ const displayUsers = async () => {
 const filter = () => {    
   let inputValue = document.getElementById("input").value
   let users = userArray
-  console.log(users)
   let dropdownValue = document.getElementById("dropdown").value
   
   if (dropdownValue === "name") {
-  let result = users.filter(user => {
+  let results = users.filter(user => {
     return user.name.includes(inputValue)          
   })
+
 table.innerHTML = `<tr>
       <th class="px-5">ID</th>
       <th class="px-5">Username</th>
       <th class="px-5">Name</th>
       <th class="px-5">Email</th>
     </tr>`
-table.innerHTML += userDisplay(result[0])
+
+results.forEach((result) => {
+  table.innerHTML += userDisplay(result)
+})
+
 } else if (dropdownValue === "username") {
-    let result = users.filter(user => {      
+    let results = users.filter(user => {      
     return user.username.includes(inputValue) 
   })
 table.innerHTML = `<tr>
@@ -109,9 +122,13 @@ table.innerHTML = `<tr>
       <th class="px-5">Name</th>
       <th class="px-5">Email</th>
     </tr>`
-table.innerHTML += userDisplay(result[0])
+
+results.forEach((result) => {
+      table.innerHTML += userDisplay(result)
+    })
+
 } else if (dropdownValue === "email") {
-  let result = users.filter(user => {      
+  let results = users.filter(user => {      
       return user.email.includes(inputValue)  
     })
 table.innerHTML = `<tr>
@@ -120,15 +137,29 @@ table.innerHTML = `<tr>
       <th class="px-5">Name</th>
       <th class="px-5">Email</th>
     </tr>`
-table.innerHTML += userDisplay(result[0])
-}
+
+results.forEach((result) => {
+      table.innerHTML += userDisplay(result)
+})
+
 }
 
+}
 
-  window.onload = () => {
-    displayUsers()
-    
-    
+const adressDisplay = function(users){
+  let container = document.querySelector(".container-fluid")
+
+  users.forEach((user) => {
+    let address = user.address
+    let p = document.createElement("p")
+    p.innerHTML = `${user.id}. ${address.street}, ${address.suite}, ${address.city} (${address.zipcode})`
+    container.appendChild(p)
+  })
+}
+
+window.onload = () => {
+  displayUsers()
+  //adressDisplay()
 }
 
   </script>
