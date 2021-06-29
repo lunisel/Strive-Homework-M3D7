@@ -28,6 +28,8 @@
 
   <button id="submit" onclick="filter()">Submit</button>
 
+  <button id="sort" onclick="sortTable()">Sort</button>
+
   <table id="table" class="mt-4">
 
     <tr>
@@ -53,7 +55,6 @@
     crossorigin="anonymous"></script>
   <script>
 
-// Ex1) Get and display, using async / await, the users from: https://jsonplaceholder.typicode.com/users 
 const userDisplay = (user) => 
                             `<tr class="text-center">
                                <td>${user.id}</td>
@@ -83,12 +84,6 @@ const displayUsers = async () => {
     } catch (err){alert(err)}
     
   }
-
-
- /*Ex2) Create a dropdown (<select>) that allows the user to select between name, username and email.
- Create then a filter. When the user types in something, 
- you should filter the user based on the input and on the value of the select.*/
-
 
 
 const filter = () => {    
@@ -157,9 +152,57 @@ const adressDisplay = function(users){
   })
 }
 
+let order = false
+
+function sortTable() {
+  order = !order
+  let x = 0
+  let y = 0
+  let switching = true
+  let rows
+  let shouldSwitch
+  let i
+  if (order === true){
+  while(switching){
+    switching = false
+    rows = table.rows
+    for(i = 1; i<(rows.length -1); i++){
+      shouldSwitch = false
+      x = rows[i].getElementsByTagName("td")[2]
+      y = rows[i + 1].getElementsByTagName("td")[2]
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+    switching = true;
+  }
+  }
+} else {
+  while(switching){
+    switching = false
+    rows = table.rows
+    for(i = 1; i<(rows.length -1); i++){
+      shouldSwitch = false
+      x = rows[i].getElementsByTagName("td")[2]
+      y = rows[i + 1].getElementsByTagName("td")[2]
+      if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+    switching = true;
+  }
+  }
+}
+}
+
 window.onload = () => {
   displayUsers()
-  //adressDisplay()
 }
 
   </script>
